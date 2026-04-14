@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NINJA471 LLC</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --ink: #e8e6df;
+    --muted: #8a8a80;
+    --faint: #2a2a27;
+    --bg: #0f0f0d;
+    --accent: #00a8ff;
+    --accent-dim: #0088cc;
+    --accent-light: #0a1520;
+    --white: #161614;
+    --surface: #131311;
+  }
+  body { background: var(--bg); color: var(--ink); font-family: 'DM Mono', monospace; min-height: 100vh; }
+
+  nav {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.5rem 3rem; border-bottom: 1px solid var(--faint);
+    background: var(--surface); position: sticky; top: 0; z-index: 10;
+  }
+  .logo { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.2em; color: var(--accent); font-weight: 400; }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a { font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-decoration: none; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero { display: grid; grid-template-columns: 1fr 1fr; min-height: 85vh; border-bottom: 1px solid var(--faint); }
+  .hero-left { padding: 5rem 4rem; display: flex; flex-direction: column; justify-content: center; background: var(--white); border-right: 1px solid var(--faint); }
+  .eyebrow { font-size: 10px; letter-spacing: 0.3em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(3.5rem, 5vw, 5.5rem); font-weight: 300; line-height: 1.05; color: var(--ink); }
+  .hero-title em { font-style: italic; color: var(--accent); }
+  .hero-divider { width: 3rem; height: 1px; background: var(--accent); margin: 2rem 0; opacity: 0.4; }
+  .hero-desc { font-size: 13px; line-height: 1.8; color: var(--muted); max-width: 36ch; letter-spacing: 0.03em; }
+  .hero-cta { margin-top: 3rem; display: flex; align-items: center; gap: 1.5rem; }
+  .btn-primary { background: var(--accent); color: #0a0a08; border: none; padding: 0.85rem 2rem; font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: background 0.2s; }
+  .btn-primary:hover { background: var(--accent-dim); }
+  .btn-ghost { font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; cursor: pointer; background: none; border: none; display: flex; align-items: center; gap: 0.5rem; font-family: 'DM Mono', monospace; transition: color 0.2s; }
+  .btn-ghost:hover { color: var(--accent); }
+  .btn-ghost::after { content: '→'; }
+
+  .hero-right { background: #111110; display: flex; flex-direction: column; justify-content: flex-end; padding: 3rem; position: relative; overflow: hidden; }
+  .hero-geo { position: absolute; top: -4rem; right: -4rem; width: 24rem; height: 24rem; border: 1px solid rgba(0,168,255,0.06); border-radius: 50%; }
+  .hero-geo-2 { position: absolute; top: 2rem; right: 2rem; width: 12rem; height: 12rem; border: 1px solid rgba(0,168,255,0.1); border-radius: 50%; }
+  .hero-geo-3 { position: absolute; bottom: 6rem; left: -3rem; width: 8rem; height: 8rem; border: 1px solid rgba(0,168,255,0.05); border-radius: 50%; }
+  .hero-tagline { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; font-style: italic; color: rgba(232,230,223,0.6); line-height: 1.5; margin-bottom: 2rem; }
+  .hero-tagline span { color: var(--accent); opacity: 0.9; }
+  .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(0,168,255,0.08); border: 1px solid rgba(0,168,255,0.08); }
+  .stat { background: #111110; padding: 1.5rem; }
+  .stat-num { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; color: var(--ink); line-height: 1; }
+  .stat-label { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-top: 0.4rem; }
+
+  section { padding: 5rem 4rem; }
+  .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 3.5rem; }
+  .section-num { font-size: 10px; color: var(--accent); letter-spacing: 0.2em; opacity: 0.7; }
+  .section-title { font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; font-weight: 300; color: var(--ink); }
+
+  .about-section { background: var(--bg); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+  .about-img-placeholder { aspect-ratio: 3/4; background: #1a1a17; border: 1px solid var(--faint); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1rem; }
+  .about-img-inner { width: 80px; height: 80px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 2rem; color: var(--accent); font-weight: 300; border: 1px solid rgba(0,168,255,0.2); }
+  .img-caption { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .about-content h3 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; margin-bottom: 0.25rem; color: var(--ink); }
+  .title-tag { font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0.8; }
+  .about-body { font-size: 13px; line-height: 1.9; color: var(--muted); margin-bottom: 1.5rem; }
+  .about-body strong { color: var(--ink); font-weight: 400; }
+  .tag-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .tag { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.4rem 0.9rem; border: 1px solid var(--faint); color: var(--muted); background: #1a1a17; transition: border-color 0.2s, color 0.2s; }
+  .tag:hover { border-color: rgba(0,168,255,0.3); color: var(--accent); }
+
+  .framework-section { background: var(--surface); }
+  .framework-intro { font-size: 13px; line-height: 1.9; color: var(--muted); max-width: 62ch; margin-bottom: 4rem; }
+  .framework-intro strong { color: var(--ink); font-weight: 400; }
+  .framework-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--faint); margin-bottom: 3rem; }
+  .fw-card { background: var(--surface); padding: 2.5rem; transition: background 0.2s; }
+  .fw-card:hover { background: #1a1a17; }
+  .fw-marker { font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 1rem; opacity: 0.8; }
+  .fw-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; margin-bottom: 0.75rem; color: var(--ink); }
+  .fw-card p { font-size: 12px; line-height: 1.9; color: var(--muted); }
+  .fw-card p strong { color: var(--ink); font-weight: 400; }
+
+  .retained-earnings { border: 1px solid var(--faint); padding: 2.5rem 3rem; background: var(--accent-light); border-left: 2px solid var(--accent); }
+  .re-label { font-size: 10px; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 1.25rem; opacity: 0.8; }
+  .re-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; color: var(--ink); margin-bottom: 1.25rem; }
+  .re-body { font-size: 13px; line-height: 1.9; color: var(--muted); margin-bottom: 1.5rem; }
+  .re-body strong { color: var(--ink); font-weight: 400; }
+  .re-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(0,168,255,0.1); margin-bottom: 1.5rem; }
+  .re-option { background: #0d1b26; padding: 1.25rem 1rem; text-align: center; }
+  .re-option-num { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--accent); opacity: 0.7; line-height: 1; margin-bottom: 0.4rem; }
+  .re-option-label { font-size: 10px; letter-spacing: 0.1em; color: var(--muted); text-transform: uppercase; line-height: 1.4; }
+  .re-tagline { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; color: rgba(232,230,223,0.5); border-top: 1px solid rgba(0,168,255,0.1); padding-top: 1.25rem; line-height: 1.6; }
+  .re-tagline span { color: var(--accent); opacity: 0.8; }
+
+  .structure-section { background: var(--bg); }
+  .structure-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .holding-box { border: 1px solid rgba(0,168,255,0.25); padding: 2.5rem; background: var(--accent-light); margin-bottom: 2rem; }
+  .holding-label { font-size: 10px; letter-spacing: 0.25em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.75rem; }
+  .holding-name { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; color: var(--ink); margin-bottom: 0.5rem; }
+  .holding-desc { font-size: 12px; line-height: 1.8; color: var(--muted); }
+  .connector-line { width: 1px; height: 2rem; background: rgba(0,168,255,0.2); margin-left: 1.5rem; }
+  .connector-label { font-size: 10px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.75rem; margin-top: 0.75rem; }
+  .sub-grid { display: flex; flex-direction: column; gap: 1px; }
+  .sub-card { background: var(--white); padding: 1.75rem 2rem; border: 1px solid var(--faint); border-left: 2px solid var(--faint); transition: border-color 0.2s, background 0.2s; }
+  .sub-card:hover { border-left-color: var(--accent); background: #1a1a17; }
+  .sub-marker { font-size: 10px; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.5rem; }
+  .sub-card h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; color: var(--ink); margin-bottom: 0.5rem; }
+  .sub-card p { font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+  /* COMMUNITY SECTION */
+  .community-section { background: var(--surface); }
+  .community-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6rem; align-items: center; }
+  .community-text .about-body { max-width: 52ch; }
+  .community-quote { border-left: 2px solid var(--accent); padding-left: 2rem; margin: 2.5rem 0; }
+  .community-quote p { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 300; font-style: italic; color: var(--ink); line-height: 1.5; }
+  .community-values { display: flex; flex-direction: column; gap: 1px; }
+  .cv-item { background: var(--bg); border: 1px solid var(--faint); padding: 1.5rem 2rem; transition: border-color 0.2s; }
+  .cv-item:hover { border-color: rgba(0,168,255,0.2); }
+  .cv-label { font-size: 10px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 0.4rem; opacity: 0.7; }
+  .cv-item p { font-size: 12px; line-height: 1.7; color: var(--muted); }
+
+  footer { padding: 2.5rem 4rem; border-top: 1px solid var(--faint); display: flex; justify-content: space-between; align-items: center; background: var(--surface); }
+  .footer-logo { font-size: 11px; letter-spacing: 0.2em; color: var(--muted); }
+  .footer-note { font-size: 10px; letter-spacing: 0.1em; color: #3a3a36; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { min-height: 300px; }
+    .about-grid, .framework-grid, .structure-layout, .community-layout { grid-template-columns: 1fr; }
+    .re-options { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 3.5rem 2rem; }
+    nav { padding: 1.25rem 2rem; }
+    .hero-left { padding: 3rem 2rem; }
+    footer { padding: 2rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+  }
+
+  .section-sub-label { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-top: -2.5rem; margin-bottom: 3.5rem; }
+  .miyazaki-block { margin-top: 4rem; border: 1px solid var(--faint); }
+  .mz-header { padding: 1.5rem 2.5rem; border-bottom: 1px solid var(--faint); background: #0d0d0b; }
+  .mz-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--faint); }
+  .mz-card { background: var(--bg); padding: 2rem 1.75rem; transition: background 0.2s; }
+  .mz-card:hover { background: #1a1a17; }
+  .mz-icon { font-size: 14px; color: var(--accent); opacity: 0.6; margin-bottom: 1rem; }
+  .mz-card-label { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink); margin-bottom: 0.75rem; }
+  .mz-card p { font-size: 12px; line-height: 1.8; color: var(--muted); }
+
+  .sean-sports-block { display: grid; grid-template-columns: 1.4fr 1fr; gap: 0; border-top: 1px solid var(--faint); }
+  .ssb-left { padding: 2.5rem 3rem; background: var(--accent-light); }
+  .ssb-right { display: flex; flex-direction: column; gap: 1px; background: var(--faint); }
+  .rank-card { background: #0d1b26; padding: 2.5rem 2rem; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .rank-num { font-family: 'Cormorant Garamond', serif; font-size: 4rem; font-weight: 300; color: var(--ink); line-height: 1; }
+  .rank-num span { font-size: 1.5rem; color: var(--accent); opacity: 0.7; }
+  .rank-label { font-size: 11px; letter-spacing: 0.15em; color: var(--muted); text-transform: uppercase; margin-top: 0.5rem; }
+  .rank-sub { font-size: 11px; letter-spacing: 0.1em; color: var(--accent); opacity: 0.6; margin-top: 0.3rem; text-transform: uppercase; }
+
+  @media (max-width: 900px) {
+    .mz-grid { grid-template-columns: 1fr 1fr; }
+    .sean-sports-block { grid-template-columns: 1fr; }
+    .ssb-right { flex-direction: row; }
+  }
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">NINJA471 LLC</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#framework">Framework</a>
+    <a href="#structure">Structure</a>
+    <a href="#community">Community</a>
+  </div>
+</nav>
+
+<section class="hero" style="padding:0;">
+  <div class="hero-left">
+    <div class="eyebrow">U.S. Tech &amp; AI · Long-Term Equity Investor</div>
+    <h1 class="hero-title">Focused<br>Capital.<br><em>Global</em><br>Reach.</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">A concentrated, long-horizon holding company investing in elite U.S. technology and AI companies — selected for exceptional capital allocation and compounding power.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="document.getElementById('framework').scrollIntoView({behavior:'smooth'})">Investment Framework</button>
+      <button class="btn-ghost" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">Learn more</button>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-geo"></div>
+    <div class="hero-geo-2"></div>
+    <div class="hero-geo-3"></div>
+    <p class="hero-tagline">"Capital deployed with<br><span>conviction</span> and patience."</p>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">FCF</div><div class="stat-label">Primary Metric</div></div>
+      <div class="stat"><div class="stat-num">5Y</div><div class="stat-label">CAGR Horizon</div></div>
+      <div class="stat"><div class="stat-num">M&amp;A</div><div class="stat-label">Background</div></div>
+      <div class="stat"><div class="stat-num">JP</div><div class="stat-label">Subsidiary GKs</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="about-section">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Leadership</h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-img-placeholder">
+      <div class="about-img-inner">SR</div>
+      <div class="img-caption">Sean Ryan · CIO</div>
+    </div>
+    <div class="about-content">
+      <h3>Sean Ryan</h3>
+      <div class="title-tag">Chief Investment Officer &amp; Manager</div>
+      <p class="about-body">Sean's investment career was built across institutional equity research and value investing — studying capital allocation through a disciplined lens across both U.S. and Japanese public markets. That foundation shapes everything about how NINJA471 invests today.</p>
+      <p class="about-body">From there, Sean built a full-cycle M&amp;A background — spanning origination, structuring, negotiation, and close — culminating in his role as <strong>CFO and head sell-side coordinator</strong> on a multi-year transaction resulting in the successful acquisition of a U.S. industrial company by a Fortune 500 buyer. The experience of running every workstream of a complex deal from inside the business is not something easily replicated.</p>
+      <p class="about-body">Bilingual in English and Japanese, and equally fluent in both financial systems and business cultures, Sean brings a <strong>dual-market literacy</strong> that is a genuine structural edge — opening access to opportunities, relationships, and insights simply unavailable to purely U.S.-based investors.</p>
+      <div class="tag-list">
+        <span class="tag">Full-cycle M&amp;A</span>
+        <span class="tag">Institutional value investing</span>
+        <span class="tag">Fortune 500 transaction</span>
+        <span class="tag">U.S. &amp; JP equities</span>
+        <span class="tag">Bilingual EN / JP</span>
+        <span class="tag">Dual-market fluency</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="framework" class="framework-section">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Investment Framework</h2>
+  </div>
+  <p class="framework-intro">We invest exclusively in U.S.-listed technology and artificial intelligence companies. Our selection process is built around one central question: <strong>how skillfully does management allocate the capital the business generates?</strong> Everything else follows from that.</p>
+
+  <div class="framework-grid">
+    <div class="fw-card">
+      <div class="fw-marker">Primary Screen</div>
+      <h4>FCF Per Share · 5Y CAGR</h4>
+      <p>We screen for consistent <strong>free cash flow per share growth</strong> over a 5-year CAGR. Revenue and earnings matter — but FCF per share is the cleanest signal of a business genuinely creating value for its owners, stripped of accounting noise and management spin.</p>
+    </div>
+    <div class="fw-card">
+      <div class="fw-marker">Critical Filter</div>
+      <h4>Share Count Discipline</h4>
+      <p>Growth means nothing if the company is giving itself away. We scrutinize <strong>share count trends over time</strong> — a business generating strong FCF growth while quietly diluting shareholders through stock-based compensation is not compounding for its owners. It is transferring wealth away from them. We avoid it.</p>
+    </div>
+    <div class="fw-card">
+      <div class="fw-marker">Sector Focus</div>
+      <h4>U.S. Tech &amp; AI</h4>
+      <p>We concentrate in U.S.-listed technology and AI companies — with particular interest in <strong>AI infrastructure, frontier model platforms, and the semiconductor supply chain</strong> underpinning the next decade of compute. Asset-light, high-margin, and structurally capable of extraordinary long-term compounding.</p>
+    </div>
+    <div class="fw-card">
+      <div class="fw-marker">Selection Process</div>
+      <h4>Historical Capital Allocation Analysis</h4>
+      <p>We study how management has deployed capital <strong>across different price environments and growth cycles</strong> — what they bought back and when, how they sized acquisitions, when they reinvested versus returned cash. Patterns of past decisions reveal the quality of the people running the business.</p>
+    </div>
+  </div>
+
+  <div class="retained-earnings">
+    <div class="re-label">The Capital Allocation Lens</div>
+    <div class="re-title">What management does with $1 of retained earnings</div>
+    <p class="re-body">Every dollar a profitable public company earns belongs to its shareholders. Management has <strong>four choices</strong> for how to deploy it — and the quality of those choices, made consistently over years and across varying market conditions, is what separates elite compounders from average businesses.</p>
+    <div class="re-options">
+      <div class="re-option">
+        <div class="re-option-num">I</div>
+        <div class="re-option-label">Pay a dividend</div>
+      </div>
+      <div class="re-option">
+        <div class="re-option-num">II</div>
+        <div class="re-option-label">Repurchase shares</div>
+      </div>
+      <div class="re-option">
+        <div class="re-option-num">III</div>
+        <div class="re-option-label">Reinvest in the business</div>
+      </div>
+      <div class="re-option">
+        <div class="re-option-num">IV</div>
+        <div class="re-option-label">Expand through M&amp;A</div>
+      </div>
+    </div>
+    <p class="re-body">We look back across share price history and growth cycles to understand what each management team decided to do — and why. A company that consistently buys back stock at intelligent prices, reinvests at high returns, and deploys M&amp;A capital with discipline tells you everything about the quality of leadership at the helm.</p>
+    <div class="re-tagline">"$1 of retained earnings should, at minimum, create <span>$1 of market value</span>. Skilled capital allocators turn that $1 into $10 — or $20 — over the long term. That asymmetry is what we are looking for."</div>
+  </div>
+</section>
+
+<section id="structure" class="structure-section">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Structure</h2>
+  </div>
+  <div class="structure-layout">
+    <div>
+      <div class="holding-box">
+        <div class="holding-label">Holding Company · Florida, USA</div>
+        <div class="holding-name">NINJA471 LLC</div>
+        <div class="holding-desc">U.S.-domiciled holding structure. Primary mandate: long-horizon concentrated investment in U.S. public technology and AI equities.</div>
+      </div>
+      <div class="connector-line"></div>
+      <div class="connector-label">Subsidiary Operating Companies · GK Structure</div>
+      <div class="sub-grid">
+        <div class="sub-card">
+          <div class="sub-marker">Real Assets</div>
+          <h4>Real Property GK</h4>
+          <p>Direct ownership of residential and commercial real estate in Japan. Focus on undervalued regional markets with strong long-term demographic and lifestyle tailwinds.</p>
+        </div>
+        <div class="sub-card">
+          <div class="sub-marker">Operations</div>
+          <h4>Fitness &amp; Wellness GK</h4>
+          <p>Development and operation of a gym and fitness facility, combined with a patent-protected calisthenics equipment and nutrition brand — Japan's first dedicated calisthenics company, now being relaunched at scale.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p class="about-body">The holding structure is intentional. NINJA471 LLC maintains a clear primary identity as a <strong>U.S. public equity investor</strong> — the subsidiary operating companies are separate vehicles, structured through Godo Kaisha entities, that operate independently with their own mandates.</p>
+      <p class="about-body">This separation keeps the investment thesis clean. The GK subsidiaries benefit from deep on-the-ground operational fluency and bilingual capability — but they do not dilute the core holding company mandate.</p>
+      <p class="about-body">The cross-border architecture creates genuine structural advantages: access to undervalued real assets, local operating cash flows, and a network and cultural fluency that simply isn't available to purely U.S.-based investors.</p>
+    </div>
+  </div>
+</section>
+
+<section id="community" class="community-section">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Community</h2>
+  </div>
+  <div class="section-sub-label">Japan Subsidiary Mission &amp; Purpose</div>
+  </div>
+
+  <div class="community-layout">
+    <div class="community-text">
+      <p class="about-body">Capital, at its best, is not just a tool for accumulation — it is a vehicle for creating something meaningful in the places and communities that matter most to you. For NINJA471, that place is Miyazaki.</p>
+      <div class="community-quote">
+        <p>Miyazaki is one of Japan's most naturally beautiful and culturally distinct regions — and one of its most overlooked. We intend to be a conscious, long-term presence here.</p>
+      </div>
+      <p class="about-body">Through the subsidiary operating companies, the goal extends beyond financial returns — to building things with real community value: spaces where people move, grow, and connect; businesses that reflect the quality and spirit of the region; and a lasting commitment to Miyazaki's future that goes well beyond simply doing business here.</p>
+    </div>
+    <div class="community-values">
+      <div class="cv-item">
+        <div class="cv-label">Conscious presence</div>
+        <p>Operating with intention — building businesses genuinely embedded in the local community, not extractive of it.</p>
+      </div>
+      <div class="cv-item">
+        <div class="cv-label">Cultural respect</div>
+        <p>A deep reverence for Japanese culture, craft, and the particular character of Miyazaki — reflected in how we build, operate, and show up.</p>
+      </div>
+      <div class="cv-item">
+        <div class="cv-label">Long-term commitment</div>
+        <p>The same long-horizon orientation that defines our investment philosophy applies here. We are not passing through. We are building for decades.</p>
+      </div>
+      <div class="cv-item">
+        <div class="cv-label">Health &amp; human potential</div>
+        <p>The fitness and wellness business is an expression of a genuine belief — that physical discipline, community, and well-being are worth investing in as ends in themselves.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="miyazaki-block">
+    <div class="mz-header">
+      <div class="re-label" style="margin-bottom:0;">Miyazaki · Action Sports &amp; Access</div>
+    </div>
+    <div class="mz-grid">
+      <div class="mz-card">
+        <div class="mz-icon">◈</div>
+        <div class="mz-card-label">Surf Capital of Japan</div>
+        <p>Miyazaki's Pacific coastline produces the most consistent and powerful surf in Japan — drawing a tight-knit community of dedicated surfers year-round. The culture here is real, rooted, and growing.</p>
+      </div>
+      <div class="mz-card">
+        <div class="mz-icon">◎</div>
+        <div class="mz-card-label">Skateboarding</div>
+        <p>A strong and authentic skate culture has taken hold across Miyazaki — part of the same action sports energy that defines the region's identity among Japan's younger, outdoor-oriented communities.</p>
+      </div>
+      <div class="mz-card">
+        <div class="mz-icon">◇</div>
+        <div class="mz-card-label">Motorcycle Country</div>
+        <p>The Miyazaki coastline and mountain routes rank among the most scenic riding roads in Japan. With a racetrack close by in Kumamoto, the region draws serious riders and a passionate motorsport community.</p>
+      </div>
+      <div class="mz-card">
+        <div class="mz-icon">◉</div>
+        <div class="mz-card-label">KMI · Gateway Access</div>
+        <p>Miyazaki Airport (KMI) provides direct connections to Tokyo, Osaka, and key domestic hubs — making it a genuinely accessible base for both business operations and international travel.</p>
+      </div>
+    </div>
+
+    <div class="sean-sports-block">
+      <div class="ssb-left">
+        <div class="re-label">Sean Ryan · Pro Snowboard Career</div>
+        <div class="re-title" style="font-size:1.6rem; margin-bottom:1rem;">From the mountains to the ocean</div>
+        <p class="re-body">Before building companies and executing transactions, Sean competed professionally on the <strong>World Snowboard Tour</strong> — reaching a world ranking of <strong>25th (4th in the USA)</strong> in 2010, and returning to competition with a ranking of <strong>34th</strong> in 2014. The discipline, resilience, and competitive edge forged at that level don't leave you.</p>
+        <p class="re-body" style="margin-bottom:0;">That background is part of why the action sports culture in Miyazaki resonates so deeply — and why giving back to it matters. The fitness and wellness businesses are, in part, an expression of that: creating spaces and communities for people who believe in the power of physical mastery, in whatever form it takes.</p>
+      </div>
+      <div class="ssb-right">
+        <div class="rank-card">
+          <div class="rank-num">25<span>th</span></div>
+          <div class="rank-label">World Snowboard Tour · 2010</div>
+          <div class="rank-sub">4th ranked in the USA</div>
+        </div>
+        <div class="rank-card">
+          <div class="rank-num">34<span>th</span></div>
+          <div class="rank-label">World Snowboard Tour · 2014</div>
+          <div class="rank-sub">International field</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">NINJA471 LLC · Florida, USA</div>
+  <div class="footer-note">Private family office · Not an investment adviser · Not soliciting</div>
+</footer>
+
+</body>
+</html>
